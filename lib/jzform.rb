@@ -1,7 +1,9 @@
 require 'haml'
-__DIR__ = File.expand_path(File.dirname(__FILE__))
-require File.expand_path(File.join(__DIR__, 'jzform', 'form'))
-require File.expand_path(File.join(__DIR__, 'jzform', 'field'))
+
+
+require File.join(File.dirname(__FILE__), 'jzform','form')
+require File.join(File.dirname(__FILE__), 'jzform','field')
+require File.join(File.dirname(__FILE__), 'jzform','template')
 
 class Hash
   def symbolize_keys
