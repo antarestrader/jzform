@@ -2,6 +2,7 @@ module JZForm
   class Form
 
     attr_reader :fields
+    attr_accessor :template
 
     def initialize
       @fields = []
@@ -22,10 +23,18 @@ module JZForm
 
     def well_formed?;true;end
 
-    def to_html
+    def to_html(opts={})
+      render(:html, opts)
+    end
 
-      haml_engine = Haml::Engine.new(File.read(File.join( File.dirname(__FILE__),'templates', 'form.haml' )))
-      haml_engine.to_html(self)
+    def render(format, opts = {})
+      @render_opts = opts || {}
+      case format
+        when :xml, :json, :yaml, :hash #structured formats
+          render_structured(format)
+        else
+          JZForm.template_for(self,format,:form).call(self)
+      end
     end
 
     def html_options
