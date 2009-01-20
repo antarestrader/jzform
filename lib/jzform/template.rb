@@ -23,7 +23,7 @@ module JZForm
         end
         eval(@script, scope, @file, 0)
       end
-    end
+    end #Runner
 
 
 
@@ -41,7 +41,7 @@ module JZForm
         file = Dir.glob(File.join(@path,file_name))[0]
         raise ArgumentError, "#{file_name} not found" if !file
         puts
-        case File.extname(file)
+        case File.extname(file) #TODO Add Formats
           when '.haml'
             @cache[format][structure] = haml(file)
           when '.rb'

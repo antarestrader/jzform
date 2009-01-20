@@ -1,6 +1,21 @@
 require File.join( File.dirname(__FILE__), '..', 'lib',"jzform" )
 
+include JZForm
+
 describe JZForm do
+  it "new should take an options hash" do
+    f = JZForm.new({
+        :name=>'registration',
+        :title=>'New User Registration',
+        :description=>"User this form to create a new user account.",
+        :instructions=>"Enter your informations in the fields provided."
+      })
+    f.name.should == 'registration'
+    f.title.should == 'New User Registration'
+    f.description.should == "User this form to create a new user account."
+    f.instructions.should == "Enter your informations in the fields provided."
+  end
+
   describe "when making a new form" do
     before :each do
       @form = JZForm.new
@@ -70,8 +85,62 @@ describe JZForm do
       end
 
     end
+  end
 
+  describe "formats:" do
+    before(:all) do
+      @form = JZForm.new
+      @form << {:name=>'username',:datatype=>:string, :label=>'Username', :description=>"The name you will use to log into this site"}
+      @form << {:name=>'password',:datatype=>:string, :label=>'Password', :description=>"A password"}
+      @form << {:name=>'password_confirmation',:datatype=>:string, :label=>'Confirm Password', :description=>"Retype your password"}
+      @form << {:name=>'country',:datatype=>:selection,:options=>%{USA Canada Mexico}, :label=>'Country', :description=>"What country do you live in?"}
+    end
 
+    it "hash" do
+      h = @form.render(:hash)
+      h[:fields].length.should == 4
+      h[:fields][3][:datatype].should ==:selection
+    end
+
+    it "JSON" do
+      json =  @form.render(:json)
+    end
+
+    it "YAML" do
+      yaml =  @form.render(:yaml)
+    end
+
+    it "XML" do
+      pending "I hate builders!"
+      xml =  @form.render(:xml)
+    end
 
   end
+
+  describe "decorations" do
+    before(:each) do
+      @form = JZForm.new
+    end
+
+    it "should have a name" do
+      @form.name = 'registration'
+      @form.render(:hash)[:name].should =='registration'
+    end
+
+    it "should have: title, description, instructions" do
+      f = JZForm.new({
+        :name=>'registration',
+        :title=>'New User Registration',
+        :description=>"User this form to create a new user account.",
+        :instructions=>"Enter your informations in the fields provided."
+      })
+      h = f.render(:hash)
+      %w{name title description instructions}.each do |attrib|
+        puts "#{attrib} was nil" if h[attrib.to_sym].nil?
+        h[attrib.to_sym].should_not be_nil
+      end
+
+    end
+  end
+
 end

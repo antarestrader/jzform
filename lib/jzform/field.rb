@@ -56,6 +56,16 @@ module JZForm
 
   private
 
+    def render_structured(format)
+      ret = Hash.new
+      ret[:datatype]=@datatype
+      ret[:name]=@name
+      ret[:options]=@options
+      ret = ret.delete_if {|k,v| v.nil?}
+      method = "to_#{format}"
+      ret.send(method.to_sym)
+    end
+
     def field_name
       prefix = @render_opts[:prefix]
       if prefix

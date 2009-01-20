@@ -1,11 +1,20 @@
+require 'json'
+
 module JZForm
   class Form
 
     attr_reader :fields
     attr_accessor :template
+    attr_accessor :name  #named used in the return hash
+    attr_accessor :title #form title for display
+    attr_accessor :description #What this form does
+    attr_accessor :instructions #how to fill out this form
 
-    def initialize
+    def initialize(opts={})
       @fields = []
+      %w{name title description instructions}.each do |attrib|
+        instance_variable_set("@#{attrib}",opts[attrib.to_sym])
+      end
     end
 
     def add_field(field)
@@ -37,8 +46,29 @@ module JZForm
       end
     end
 
+    def render_structured(format)
+      ret = Hash.new
+      ret[:fields] = @fields.map {|f| f.render(:hash)}
+      add_decoration(ret)
+      ret = ret.delete_if {|k,v| v.nil?}
+      method = "to_#{format}"
+      ret.send(method.to_sym)
+    end
+
+    def inspect
+      "#<JZForm::Form name=#{@name}, #{@fields.length} fields>"
+    end
+
+
+  private
     def html_options
-      {:method=>'post', :name=>'name_from_attrs'}
+      {:method=>'post', :name=>@name}
+    end
+
+    def add_decoration(hash)
+      %w{name title description instructions}.each do |attrib|
+        hash[attrib.to_sym] = instance_variable_get("@#{attrib}")
+      end
     end
 
   end

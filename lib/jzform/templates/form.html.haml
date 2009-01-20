@@ -1,3 +1,10 @@
 %form{html_options}
+  - if @title
+    %h1=@title
+  - if @description
+    %p.description=@description
+  - if @instructions
+    %p.instructions=@instructions
+  - @render_opts[:prefix]=@name
   - @fields.each do |field|
-    =field.to_html
+    =field.to_html(@render_opts)
