@@ -9,12 +9,15 @@ module JZForm
     attr_accessor :title #form title for display
     attr_accessor :description #What this form does
     attr_accessor :instructions #how to fill out this form
+    attr_accessor :exclusive #only fields listed may be present
+    attr_accessor :errors #errors in validating
 
     def initialize(opts={})
       @fields = []
       %w{name title description instructions}.each do |attrib|
         instance_variable_set("@#{attrib}",opts[attrib.to_sym])
       end
+      @errors = []
     end
 
     def add_field(field)
@@ -39,11 +42,29 @@ module JZForm
     def render(format, opts = {})
       @render_opts = opts || {}
       case format
-        when :xml, :json, :yaml, :hash #structured formats
+        when :json, :yaml, :hash #structured formats
           render_structured(format)
         else
           JZForm.template_for(self,format,:form).call(self)
       end
+    end
+
+    def value=(input)
+      @value = input
+      @errors = []
+      input.each do |key, val|
+        unless find_field(key)
+          @errors << {:message=>"Unknown field(#{key}) found in exclusive form"}
+        end
+      end if @exclusive
+    end
+
+    def value
+      valid? ? @value : nil
+    end
+
+    def valid?
+      @errors.empty?
     end
 
     def render_structured(format)
@@ -69,6 +90,10 @@ module JZForm
       %w{name title description instructions}.each do |attrib|
         hash[attrib.to_sym] = instance_variable_get("@#{attrib}")
       end
+    end
+
+    def find_field(key)
+      @fields.find {|field| field.name == key}
     end
 
   end

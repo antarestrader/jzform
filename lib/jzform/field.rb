@@ -3,6 +3,7 @@ module JZForm
 
     attr_reader :datatype
     attr_accessor :template
+    attr_accessor :name
 
     def initialize(hash)
       unless hash.kind_of? Hash
