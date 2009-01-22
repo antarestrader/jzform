@@ -63,6 +63,10 @@ module JZForm
       valid? ? @value : nil
     end
 
+    def current_value
+      @value
+    end
+
     def valid?
       @errors.empty?
     end
@@ -90,6 +94,7 @@ module JZForm
       %w{name title description instructions}.each do |attrib|
         hash[attrib.to_sym] = instance_variable_get("@#{attrib}")
       end
+      hash[:errors] = @errors unless @errors.empty?
     end
 
     def find_field(key)

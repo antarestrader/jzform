@@ -4,6 +4,8 @@ module JZForm
     attr_reader :datatype
     attr_accessor :template
     attr_accessor :name
+    attr_reader :errors
+    attr_accessor :validations
 
     def initialize(hash)
       unless hash.kind_of? Hash
@@ -28,8 +30,26 @@ module JZForm
       @datatype = hash[:datatype].to_sym
       @name = hash[:name]
       @options = hash[:options]
+      @value = hash[:value] || hash[:default] || nil
+      @default = hash[:default]
+      @errors = []
+      @validations = []
     end
 
+    def valid?
+      @errors.empty?
+    end
+
+    def value=(input)
+      @value = input
+      validate
+    end
+
+    def value
+      valid? ? @value : nil
+    end
+
+    def current_value;@value;end
     #valid options
     #
     #   :prefix  :  A string to place in front of the name attribute
@@ -55,7 +75,20 @@ module JZForm
       !@subforms.nil?
     end
 
+    def validate
+      @errors = []
+      send("validate_#{datatype}")
+    end
+
   private
+
+    def validate_string
+      if validations.include? :not_empty
+        if @value.empty?
+          @errors << "This field cannot be empty"
+        end
+      end
+    end
 
     def render_structured(format)
       ret = Hash.new

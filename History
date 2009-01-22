@@ -1,0 +1,9 @@
+Version 0.1.0 (Minimal Functionality Release)
+=============================================
+
+* Initial Release
+* Basic HTML output
+* JSON, YAML output
+* Form and String Verification
+* Form Decoration
+* Field Decoration

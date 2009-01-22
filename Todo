@@ -1,0 +1,43 @@
+Fields
+======
+
+* Sets
+* Subforms
+* Boolean Subforms
+* Integer SubForms
+
+Verification
+============
+
+* Required Fields
+* Strings
+  - Regex
+  - Length
+
+* Integer/number
+  - Fromat from string
+  - Range
+
+* Selection
+
+Subforms
+========
+
+Javascript Renderer
+===================
+
+Output
+======
+
+* XML
+  - Find a decent builder
+  - Finalize fromat
+
+
+Loading
+=======
+
+* JSON
+* Yaml
+* Hash
+* XML

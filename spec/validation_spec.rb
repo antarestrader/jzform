@@ -22,6 +22,10 @@ describe "JZForm::Form Validations:" do
         @form.value.should ==(@answer)
       end
 
+      it "should not have errors in the rendered hash" do
+        @form.render(:hash).should_not have_key(:errors)
+      end
+
     end
     describe "when an invalid answer is provided" do
       before(:each) do
@@ -37,6 +41,15 @@ describe "JZForm::Form Validations:" do
       it "should have errors" do
         @form.errors.length.should > 0
       end
+
+      it "should have a current value" do
+        @form.current_value.should == @answer
+      end
+
+      it "there should be errors in a rendered hash" do
+        @form.render(:hash)[:errors].should_not be_nil
+      end
+
     end
   end
 
@@ -45,7 +58,7 @@ describe "JZForm::Form Validations:" do
       before(:each) do
         @form.exclusive = true
       end
-      describe "and invalid data" do
+      describe "and valid data" do
         before(:each) do
           @form.value = @answer
         end
@@ -65,6 +78,12 @@ describe "JZForm::Form Validations:" do
 
         it "should NOT be valid" do
           @form.should_not be_valid
+        end
+
+        it "should have one error" do
+          @form.errors.length.should == 1
+          @form.errors[0][:message].should match(/foo/)
+          @form.errors[0][:message].should match(/exclusive/)
         end
 
       end
