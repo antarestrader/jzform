@@ -1,0 +1,72 @@
+h1. Introduction
+
+jzForm is a package that aims to do for user input what CSS did for web
+design -- seperate content from presentation.
+Its goal it is to allow one program or one part of a program to
+declare what kind of data it need back, another to format that request for
+display to the user, and a third to provide the answer. It provides
+functionality for verifying that data returned matched the request.  The hope
+is that this program will take care of a lot of the back and forth between
+programs and their ultimate users.
+
+jzForm was designed with web based applications in mind and so used the HTML
+term 'form' to describe the intended output, but there is noting in jzForm that
+requires a form actually be produced.  It was designed to enable machines as
+well as real users to respond to a request.
+
+h1. Usage
+
+h3. NOTE: Not all feature are currently implented
+
+jzForm breaks the process of building a form up into three distinct functions:
+Discribing the data to be returned, formatting an appropriate view to request
+that data, and dealing with the returned values.
+
+h2. Describe the Data
+
+Good design dictates that the buisness logic of a program and the user interface
+should not be mixed.  This is expressed in MVC web frameworks like Rails and
+Merb.  The model section in these cases should never be involved in creating
+HTML.  But, it is often this modle layer that knows what external data it needs.
+In the simple case the controller and view layers assume that they know what
+information is needed, either because it is hard coded into the application,
+or by inspecting some feature of the model class.  Both cases are suboptimal.
+The former actually moves the logic around what information is needed into the
+view layer and freezes it there.  The form must be modified or rewritten if
+the needed information changes in development, and there is no way for the
+buisness logic to change the form at run time. (At least not without putting
+too much logic into the view.)
+
+jzForm allows the mnodel layer to describe to the Controller precisly what
+information it need to collect.  It can do this without regard for how any
+other layer will eventually present this request and retrieve the information.
+
+There are two options for describing this data.  One is to build up a JZForm
+Object.  This class provides convient methods fro adding fields, setting
+validation conditions and managing data.
+
+The other is to create a textual representation of a jzForm.  jzForm has a
+standard format that can be represented in JSON, YAML, or XML.  This means
+that the program that requests the information need not even run Ruby or be in
+the local memory space.
+
+h2. Present the Form
+
+JZForm uses templates to render its forms.  The package ships with templates
+written in ruby the render a basic HTML form and a pacakge that will render
+the form to a text console.  It also ships with a Javascript package that can
+create a form from a JSON object.
+
+The presentation can easily be customized with user designed templates an
+application, form, or even field level.
+
+h2. Return Valid Data
+
+Finally, when data is returned, it needs to be validated.  jzForm takes
+care of this step automatically based on provide rules.  When one retrieves a
+value from a JZForm object, one can be sure that it within the constraints that
+were set for it.  This closes one of the most common sources of security
+breaches, namely failing to properly validate user input.  By ceneralizing the
+chanel that user generated data flows throught and building validating directly
+on to that channel it is antisipated that such errors will be dramitically
+reduced.
