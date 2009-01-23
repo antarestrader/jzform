@@ -1,0 +1,7 @@
+jzForm is a system for seperating content from presentation when building
+forms.  Its goal it is to allow one program or one part of a program to
+declare what kind of data it need back, another to format that request for
+display to the user, and a third to provide the answer. It provides
+functionality for verifying that data returned matched the request.  The hope
+is that this program will take care of a lot of the back and forth between
+programs and their ultimate users.
