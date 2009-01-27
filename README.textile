@@ -14,7 +14,7 @@ term 'form' to describe the intended output, but there is noting in jzForm that
 requires a form actually be produced.  It was designed to enable machines as
 well as real users to respond to a request.
 
-h1. Usage
+h1. Philosophy
 
 h3. NOTE: Not all feature are currently implented
 
@@ -70,3 +70,12 @@ breaches, namely failing to properly validate user input.  By ceneralizing the
 chanel that user generated data flows throught and building validating directly
 on to that channel it is antisipated that such errors will be dramitically
 reduced.
+
+h1. Examples
+
+In the example folder there is a file, form_test.rb, that will run jzforms.  It
+is a merb "very flat app" and is run with 'merb -I example/form_test.rb'.
+There are a couple different forms in the file. A get request to localhost:4000
+will show the from.  submiting that form will show the params that it generated.
+
+As validations and subforms get implimented, more will be added here.

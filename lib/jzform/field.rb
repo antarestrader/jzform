@@ -29,6 +29,7 @@ module JZForm
       end
       @datatype = hash[:datatype].to_sym
       @name = hash[:name]
+      @title = hash[:title] || @name
       @options = hash[:options]
       @value = hash[:value] || hash[:default] || nil
       @default = hash[:default]
@@ -103,9 +104,9 @@ module JZForm
     def field_name
       prefix = @render_opts[:prefix]
       if prefix
-        prefix + (@name ? "[#{@name}]" : "")
+        prefix + (@name ? "[#{@name}]" : "[]")
       else
-        @name || 'field'
+        @name || 'field[]'
       end
     end
 
