@@ -4,6 +4,7 @@ module JZForm
     attr_reader :datatype
     attr_accessor :template
     attr_accessor :name
+    attr_accessor :label
     attr_reader :errors
     attr_accessor :validations
 
@@ -29,7 +30,7 @@ module JZForm
       end
       @datatype = hash[:datatype].to_sym
       @name = hash[:name]
-      @title = hash[:title] || @name
+      @lable = hash[:title] || @name
       @options = hash[:options]
       @value = hash[:value] || hash[:default] || nil
       @default = hash[:default]
