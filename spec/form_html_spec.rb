@@ -13,6 +13,6 @@ describe "jzForm basic html output" do
   end
 
   it "should have one <div> for each field" do
-    @resp.xpath('/form/div').length.should ==(3)
+    @resp.xpath('/form//div').length.should ==(3)
   end
 end

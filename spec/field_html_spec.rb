@@ -22,8 +22,8 @@ describe "JZForm::Field html" do
         html(:datatype=>:string, :name=>'name').css("input[name='name']").should_not be_empty
       end
 
-      it "when empty should be 'field'" do
-        html(:string).css("input[name='field']").should_not be_empty
+      it "when empty should be 'field[]'" do
+        html(:string).css("input[name='field[]']").should_not be_empty
       end
 
       it "with a prefix should be prefix[name]" do
@@ -31,8 +31,8 @@ describe "JZForm::Field html" do
       end
 
       #TODO: check this with form processor
-      it "with a prefix but no name should be just the prefix" do
-        html(:datatype=>:string, :html=>{:prefix=>'user'} ).css("input[name='user']").should_not be_empty
+      it "with a prefix but no name should be the prefix as an array" do
+        html(:datatype=>:string, :html=>{:prefix=>'user'} ).css("input[name='user[]']").should_not be_empty
       end
 
     end
