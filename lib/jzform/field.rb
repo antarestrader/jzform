@@ -111,6 +111,44 @@ module JZForm
     end
 
     def validate_integer
+      unless @value.kind_of? Integer
+        if @value.kind_of? String
+          if @value.empty?
+            @value = nil
+          else
+            begin
+              @value = Integer(@value)
+            rescue ArgumentError
+              @errors << "Format not understood: could not convert '#{@value}' to an integer"
+            end
+          end
+        else
+          @value.to_i
+        end
+      end
+
+      if validations[:not_empty] && @value.nil?
+        @errors << "This field cannot be empty"
+      end
+
+      if (validations[:minimum] || validations[:maximum] || validations[:range]) && !@value.nil?
+        if validations[:range] && !validations[:range].kind_of?(Range)
+          if validations[:range].to_s =~ /^\(?(-?\d+(?:\.\d+)?)\)?\.\.\(?(-?\d+(?:\.\d+)?)\)?/
+            validations[:range] = ($1.to_i)..($2.to_i)
+          else
+            raise ArgumentError, ":range must be in the format #..#"
+          end
+        end
+        min = validations[:minimum] || (validations[:range] && validations[:range].min)
+        max = validations[:maximum] || (validations[:range] && validations[:range].max)
+        if min && @value < min
+          @errors << "This field must be at least #{min}"
+        end
+        if max && @value > max
+          @errors << "This field can be at most #{max}"
+        end
+
+      end
 
     end
 
