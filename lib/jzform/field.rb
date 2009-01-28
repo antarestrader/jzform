@@ -3,6 +3,7 @@ module JZForm
 
     attr_reader :datatype
     attr_accessor :template
+    attr_accessor :format
     attr_accessor :name
     attr_accessor :label
     attr_reader :errors
@@ -28,14 +29,17 @@ module JZForm
       unless BASIC_TYPES.include?(hash[:datatype].to_sym)
         raise ArgumentError, "#{datatype} is not a recognized datatype"
       end
-      @datatype = hash[:datatype].to_sym
-      @name = hash[:name]
-      @lable = hash[:title] || @name
-      @options = hash[:options]
-      @value = hash[:value] || hash[:default] || nil
-      @default = hash[:default]
+
+      @datatype = hash.delete(:datatype).to_sym
+      @name = hash.delete(:name)
+      @lable = hash.delete(:title) || @name
+      @options = hash.delete(:options)
+      @format = hash.delete(:format)
+      @fromat = @format.to_sym unless @format.nil?
+      @value = hash.delete(:value) || hash[:default] || nil
+      @default = hash.delete(:default)
       @errors = []
-      @validations = []
+      @validations = hash.delete(:validations) || {}
     end
 
     def valid?
@@ -85,11 +89,33 @@ module JZForm
   private
 
     def validate_string
-      if validations.include? :not_empty
+      if validations[:not_empty]
         if @value.empty?
           @errors << "This field cannot be empty"
         end
       end
+
+      if validations[:match]
+        unless @value =~ validations[:match]
+          @errors << "This field did not match the expected pattern: #{validations[:match].to_s}"
+        end
+      end
+
+      if validations[:length] || validations[:min_length]
+        r = validations[:length]
+        min = (r.kind_of?(Range) ? r.min : (validations[:min_length] || 0))
+        max = (r.kind_of?(Range) ? r.max : r)
+        @errors << "This field must at least #{min} charactors" if @value.length < min
+        @errors << "This field can be at most #{max} charactors" if max && @value.length > max
+      end
+    end
+
+    def validate_integer
+
+    end
+
+    def validate_number
+
     end
 
     def render_structured(format)
@@ -113,6 +139,3 @@ module JZForm
 
   end
 end
-
-#      haml_engine = Haml::Engine.new(File.read(File.join( File.dirname(__FILE__),'templates', 'field.haml' )))
-#      haml_engine.to_html(self)

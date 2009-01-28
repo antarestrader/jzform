@@ -30,6 +30,7 @@ module JZForm
         @fields << field
         self
       end
+      self
     end
     alias_method :<<,:add_field
 

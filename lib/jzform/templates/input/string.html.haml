@@ -1,1 +1,1 @@
-%input{:name=>field_name, :type=>'text', :value=>@value}
+%input{:name=>field_name, :type=>(@format == :hidden ? 'password' : 'text'), :value=>@value}
