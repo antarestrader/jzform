@@ -32,7 +32,7 @@ module JZForm
 
       @datatype = hash.delete(:datatype).to_sym
       @name = hash.delete(:name)
-      @lable = hash.delete(:title) || @name
+      @label = hash.delete(:label) || @name
       @options = hash.delete(:options)
       @format = hash.delete(:format)
       @fromat = @format.to_sym unless @format.nil?
