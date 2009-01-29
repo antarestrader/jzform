@@ -11,13 +11,15 @@ module JZForm
     attr_accessor :instructions #how to fill out this form
     attr_accessor :exclusive #only fields listed may be present
     attr_accessor :errors #errors in validating
+    attr_accessor :action #the action that this form will take used for the text of the submit button
 
     def initialize(opts={})
       @fields = []
-      %w{name title description instructions}.each do |attrib|
+      %w{name title description instructions action exclusive}.each do |attrib|
         instance_variable_set("@#{attrib}",opts[attrib.to_sym])
       end
       @errors = []
+      @action ||= 'Go'
     end
 
     def add_field(field)
@@ -51,13 +53,26 @@ module JZForm
     end
 
     def value=(input)
-      @value = input
+      if input.kind_of?(Hash) && input[@name]
+        @value = input[@name]
+      else
+        @value = input
+      end
       @errors = []
-      input.each do |key, val|
+      @value.each do |key, val|
         unless find_field(key)
           @errors << {:message=>"Unknown field(#{key}) found in exclusive form"}
         end
       end if @exclusive
+      @fields.each do |field|
+        field.value = @value[field.name]
+        unless field.valid?
+          field.errors.each do |err|
+            @errors << {:field=>field.name,:message=>err}
+          end
+        end
+        @value[field.name] = field.current_value
+      end
     end
 
     def value

@@ -18,7 +18,6 @@ describe "JZForm::Form Validations:" do
       end
 
       it "should provide a value when it is valid" do
-        @form.value = @answer
         @form.value.should ==(@answer)
       end
 
@@ -48,6 +47,26 @@ describe "JZForm::Form Validations:" do
 
       it "there should be errors in a rendered hash" do
         @form.render(:hash)[:errors].should_not be_nil
+      end
+
+    end
+
+    describe "when a valid answer is provided in a hash" do
+      before(:each) do
+        @form.exclusive = true #will help to make tests fail more easily
+        @form.value = {'form'=>@answer}
+      end
+
+      it "should be valid" do
+        @form.should be_valid
+      end
+
+      it "should provide a value when it is valid" do
+        @form.value.should ==(@answer)
+      end
+
+      it "should not have errors in the rendered hash" do
+        @form.render(:hash).should_not have_key(:errors)
       end
 
     end
@@ -91,4 +110,24 @@ describe "JZForm::Form Validations:" do
     end
 
   end
+
+  describe " of fields" do
+    before(:each) do
+      @form << {:name=>'req',:datatype=>:string, :validations=>{:not_empty=>true}}
+      @answer['req'] = 'present'
+    end
+
+    it "should NOT be valid if any field is invalid" do
+      @answer.delete 'req'
+      @form.value = @answer
+      @form.should_not be_valid
+    end
+
+    it "should be valid if all fields are valid" do
+      @form.value = @answer
+      @form.should be_valid
+      @form.value.should ==(@answer)
+    end
+  end
+
 end

@@ -90,18 +90,18 @@ module JZForm
 
     def validate_string
       if validations[:not_empty]
-        if @value.empty?
+        if @value.nil? || @value.empty?
           @errors << "This field cannot be empty"
         end
       end
 
-      if validations[:match]
+      if validations[:match] && !@value.nil?
         unless @value =~ validations[:match]
           @errors << "This field did not match the expected pattern: #{validations[:match].to_s}"
         end
       end
 
-      if validations[:length] || validations[:min_length]
+      if (validations[:length] || validations[:min_length]) && !@value.nil?
         r = validations[:length]
         min = (r.kind_of?(Range) ? r.min : (validations[:min_length] || 0))
         max = (r.kind_of?(Range) ? r.max : r)

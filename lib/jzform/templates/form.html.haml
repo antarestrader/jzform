@@ -6,8 +6,12 @@
       %p.description=@description
     - if @instructions
       %p.instructions=@instructions
+    - unless @errors.empty?
+      .error
+        - @errors.each do |err|
+          %p= err[:message]
     - @render_opts[:prefix]=@name
     - @fields.each do |field|
       =field.to_html(@render_opts)
     %button{:type=>'submit',:name=>'submit'}
-      Go
+      = @action
