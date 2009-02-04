@@ -158,9 +158,11 @@ module JZForm
 
     def render_structured(format)
       ret = Hash.new
-      ret[:datatype]=@datatype
-      ret[:name]=@name
-      ret[:options]=@options
+      %w{name datatype options label format}.each do |attrib|
+        ret[attrib.to_sym] = instance_variable_get("@#{attrib}")
+      end
+      hash[:errors] = @errors unless @errors.empty?
+      hash[:validations] = @validations unless @validations.empty?
       ret = ret.delete_if {|k,v| v.nil?}
       method = "to_#{format}"
       ret.send(method.to_sym)

@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = File.read('About')
   s.email = 'support@antarestrader.com'
   s.extra_rdoc_files = ['README.textile']
-  s.files = Dir['lib/**/*'] + Dir['spec/**/*'] +
+  s.files = Dir['lib/**/*'] + Dir['spec/**/*'] + Dir['javascript/**/*']
     ['About','Todo','License','Rakefile','README.textile','History','Version']
   s.has_rdoc = true
   #s.homepage = 'http://???'

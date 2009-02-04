@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>jzForm Unit Tests</title>
+    <script src="support/jquery-1.2.6.js"></script>
+    <script src="support/jquery.fn.js"></script>
+    <script src="support/jquery.print.js"></script>
+    <script src="support/screw.builder.js"></script>
+    <script src="support/screw.matchers.js"></script>
+    <script src="support/screw.events.js"></script>
+    <script src="support/screw.behaviors.js"></script>
+    
+    <script src="spec_helper.js"></script>
+    
+    <!-- Scripts to test -->
+    <script src="../jzform.js"></script>
+    
+    <!-- Tests -->
+    <script src="form-builder.js"></script>
+        
+    
+    <link rel="stylesheet" href="support/screw.css">
+  </head>
+  <body>
+    <div id="dom_test" style="position: absolute; left: -9999"></div>
+  </body>
+</html>

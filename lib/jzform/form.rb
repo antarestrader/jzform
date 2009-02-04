@@ -42,6 +42,10 @@ module JZForm
       render(:html, opts)
     end
 
+    def to_json(opts={})
+      render_strucured(:json, opts)
+    end
+
     def render(format, opts = {})
       @render_opts = opts || {}
       case format
@@ -107,7 +111,7 @@ module JZForm
     end
 
     def add_decoration(hash)
-      %w{name title description instructions}.each do |attrib|
+      %w{name title description instructions action exclusive}.each do |attrib|
         hash[attrib.to_sym] = instance_variable_get("@#{attrib}")
       end
       hash[:errors] = @errors unless @errors.empty?
