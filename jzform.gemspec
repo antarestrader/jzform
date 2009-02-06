@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.author = 'John F. Miller'
-  s.date = File.ctime('Version')
+  s.date = Wed Feb 04 12:22:52 -0800 2009
   s.add_dependency('haml', '>= 2.0.0')
   s.add_dependency('nokogiri', '>= 1.1.0')
   s.description = File.read('About')
